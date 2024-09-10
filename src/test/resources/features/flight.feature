@@ -1,21 +1,21 @@
 Feature: Search Flight
 
   Scenario: Search RoundTrip Flight
-    When the user enters the route from "İstanbul" to "Ankara"
+    When  the user enters the route from "İstanbul" to "Ankara"
 
-    And i choose round trip
+    And the user chooses round trip and picks the date
 
-    And I click on Find Button
+    And the user clicks on Find Button
 
+    Then the user sees the Flights Page
 
+    When the user clicks on Departure Takeoff and Landing time filter
 
-    When the client clicks on Departure Takeoff and Landing time filter
+    And the user drags the left slider to right
 
-    And the client drags the left slider to right
+    And the user drags the right slider to left
 
-    And the client drags the right slider to left
-
-    Then the client sees that al flights are between "10:00" and "18:00"
+    Then the user sees that al flights are between "10:00" and "18:00"
 
 
 

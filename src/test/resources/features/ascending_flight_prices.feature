@@ -2,13 +2,12 @@ Feature: Search Flight
 
   Scenario: Search Türk Hava Yolları flights in ascending order
 
-    Given The user is on the ENUYGUN Homepage
 
-    When  the user enter the route from "İstanbul" to "Ankara"
+    When  the user enters the route from "İstanbul" to "Ankara"
 
     And   the user chooses round trip and picks the date
 
-    And   the user clicks on Find button
+    And   the user clicks on Find Button
 
     Then  the user sees the Flights Page
 

@@ -12,13 +12,13 @@ public class HomePageSteps extends BaseStep {
     HomePage homePage = new HomePage();
 
 
-    @When("i enter the route from {string} to {string}")
+    @When("the user enters the route from {string} to {string}")
     public void iEnterTheRouteFromTo(String fromWhere, String toWhere) {
         homePage.enterRouteInformation(fromWhere, toWhere);
         LOGGER.debug("The user chooses the departure and arrival cities ");
     }
 
-    @And("i choose round trip")
+    @And("the user chooses round trip and picks the date")
     public void iChooseRoundTrip() throws InterruptedException {
         homePage.clickOnRoundTripFilter();
         homePage.clickOnDepartureDatePicker("16 Ekim 2024");
@@ -26,7 +26,7 @@ public class HomePageSteps extends BaseStep {
         LOGGER.debug("The user chooses round trip and picks up the date ");
     }
 
-    @And("I click on Find Button")
+    @And("the user clicks on Find Button")
     public void iClickOnFindButton() {
         homePage.clickOnFindButton();
         LOGGER.debug("The user clicks on Find Cheap Tickets button");
