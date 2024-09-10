@@ -32,7 +32,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "button[type='submit']")
     private WebElement findCheapTicketButton;
 
-    public void enterRouteInformation(String fromWhere, String toWhere) {
+    public void enterRouteInformation(String fromWhere, String toWhere) {     //TARİH-ROTA PARAMETRİK OLACAK//
         fromWhereBox.click();
         fromWhereBox.sendKeys(fromWhere);
         BrowserUtils.enterText();
@@ -56,7 +56,7 @@ public class HomePage extends BasePage {
                         break;
                     }
                 }
-            }else if(departureDate.contains(elements.get(1).findElement(By.cssSelector("h3[class='sc-fKMpNL lkJvvP']")).getText())){
+            } else if (departureDate.contains(elements.get(1).findElement(By.cssSelector("h3[class='sc-fKMpNL lkJvvP']")).getText())) {
                 String day = departureDate.split(" ")[0];
                 List<WebElement> days = elements.get(1).findElements(By.cssSelector("button[data-testid='datepicker-active-day']"));
                 for (int i = 0; i < days.size(); i++) {
@@ -66,7 +66,7 @@ public class HomePage extends BasePage {
                         break;
                     }
                 }
-            }else{
+            } else {
                 departureDatePicker.findElement(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg")).click();
             }
         }
