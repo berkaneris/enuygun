@@ -156,4 +156,9 @@ public class BrowserUtils {
 		actions.moveToElement(element).keyDown(Keys.ENTER).build().perform();
 	}
 
+	public static void clickWithJS(WebElement element) {
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) DriverManager.getDriver();
+		jsExecutor.executeScript("arguments[0].setAttribute('aria-valuenow', '1080');", element);
+	}
+
 }

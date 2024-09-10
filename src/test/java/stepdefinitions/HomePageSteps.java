@@ -18,11 +18,11 @@ public class HomePageSteps extends BaseStep {
         LOGGER.debug("The user chooses the departure and arrival cities ");
     }
 
-    @And("the user chooses round trip and picks the date")
-    public void iChooseRoundTrip() throws InterruptedException {
+    @And("the user chooses round trip and picks the departure date as {string} and the return date as {string}")
+    public void theUserChoosesRoundTripAndPicksTheDepartureDateAsAndTheReturnDateAs(String departureDate, String returnDate) {
         homePage.clickOnRoundTripFilter();
-        homePage.clickOnDepartureDatePicker("16 Ekim 2024");
-        Thread.sleep(5000);
+        homePage.clickOnDepartureDatePicker(departureDate);
+        homePage.clickOnReturnDatePicker(returnDate);
         LOGGER.debug("The user chooses round trip and picks up the date ");
     }
 
@@ -31,6 +31,7 @@ public class HomePageSteps extends BaseStep {
         homePage.clickOnFindButton();
         LOGGER.debug("The user clicks on Find Cheap Tickets button");
     }
+
 
 
 }

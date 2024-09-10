@@ -3,7 +3,7 @@ Feature: Search Flight
   Scenario: Search RoundTrip Flight
     When  the user enters the route from "İstanbul" to "Ankara"
 
-    And the user chooses round trip and picks the date
+    And the user chooses round trip and picks the departure date as "11 Ocak 2025" and the return date as "20 Şubat 2025"
 
     And the user clicks on Find Button
 

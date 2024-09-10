@@ -3,9 +3,11 @@ package stepdefinitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
 import pages.FlightsPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.DriverManager;
 
 public class FlightsPageSteps extends BaseStep {
 
@@ -21,7 +23,7 @@ public class FlightsPageSteps extends BaseStep {
     }
 
     @And("the user drags the left slider to right")
-    public void theClientDragsTheLeftSliderToRight() {
+    public void theClientDragsTheLeftSliderToRight() throws InterruptedException {
         flightsPage.moveTheFirstSlider();
         LOGGER.debug("The user drags the first left slider");
     }
@@ -51,5 +53,10 @@ public class FlightsPageSteps extends BaseStep {
     public void theUserChoosesTurkHavaYolları() {
         flightsPage.clickOnTurkishAirlinesFilter();
         LOGGER.info("The user clicks on Türk Hava Yolları checkbox");
+    }
+
+    @Then("the user sees the Flights Page")
+    public void theUserSeesTheFlightsPage() {
+        Assertions.assertTrue(DriverManager.getDriver().getCurrentUrl().contains("https://www.enuygun.com/ucak-bileti"));
     }
 }

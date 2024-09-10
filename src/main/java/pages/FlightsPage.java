@@ -1,7 +1,6 @@
 package pages;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -10,15 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import utils.BrowserUtils;
 
 public class FlightsPage extends BasePage {
 
     @FindBy(xpath = "//div[contains(text(),'Havayolu')]")
     private WebElement airlineTextField;              //Yeni sayfaya geçtiğimizi assert etmek için seçtim//
-
-
-    /*@FindBy(css = "div.filter-card.card")    //(//span[@class='card-title'])[4] istenen filtre konumu//
-    private List<WebElement> filters; */
 
     @FindBy(css = "div.ctx-filter-departure-return-time.card-header")
     private WebElement departureTimeFilter;
@@ -26,7 +22,7 @@ public class FlightsPage extends BasePage {
     @FindBy(css = "div.ctx-filter-airline.card-header")
     private WebElement airlineFilter;
 
-    @FindBy(css = "p.checkbox-only-filter.mb-0.search__filter_airlines_only-TK.--p")
+    @FindBy(css = "span[class='checkbox  search__filter_airlines-TK --span-1']")
     private WebElement turkishAirlinesCheckBox;
 
 
@@ -38,6 +34,9 @@ public class FlightsPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class, 'flight-departure-time')]")
     private List<WebElement> flights;
 
+    @FindBy(css = "div[class='filter-accordion  '] > div")
+    private List<WebElement> flightsFilters;
+
 
     public void getAirlineText() {
         airlineTextField.getText();
@@ -45,37 +44,43 @@ public class FlightsPage extends BasePage {
 
     public void clickOnDepartureTimeFilter() {
         wait.until(ExpectedConditions.elementToBeClickable(departureTimeFilter));
-        departureTimeFilter.click();
+        BrowserUtils.clickOnElement(departureTimeFilter);
 
 
     }
 
-    public void moveTheFirstSlider() {
-
+    public void moveTheFirstSlider() throws InterruptedException {
+        BrowserUtils.scrollToElement(sliders.get(0));
+        Thread.sleep(1000);
         actions.moveToElement(sliders.get(0)).
                 dragAndDropBy(sliders.get(0), 100, 0).build().perform();
 
-
+        Thread.sleep(1000);
     }
 
     public void moveTheSecondSlider() throws InterruptedException {
 
-        actions.moveToElement(sliders.get(1)).clickAndHold().moveByOffset(-200, 0).release().build().perform();
+        actions.moveToElement(sliders.get(1)).
+                dragAndDropBy(sliders.get(1), -60, 0).build().perform();
 
 
-        Thread.sleep(10000);
+        Thread.sleep(2000);
     }
 
 
     public void clickOnAirlinesFilter() {
-        airlineFilter.click();
-
+        BrowserUtils.clickOnElement(airlineFilter);
     }
 
     public void clickOnTurkishAirlinesFilter() {
-        wait.until(ExpectedConditions.visibilityOf(turkishAirlinesCheckBox));
+        BrowserUtils.scrollToElement(turkishAirlinesCheckBox);
         actions.moveToElement(turkishAirlinesCheckBox)
                 .click().build().perform();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void verifyAllFlightHoursAreExpectedHours(String firstHourStr, String secondHourStr) throws InterruptedException {
@@ -105,10 +110,10 @@ public class FlightsPage extends BasePage {
 
         }
         for (LocalTime flightTime : times) {
-            Assertions.assertTrue(flightTime.isAfter(firstHour) && flightTime.isBefore(secondHour),
+            Assertions.assertTrue(flightTime.compareTo(firstHour) >= 0 && flightTime.compareTo(secondHour) <= 0,
                     "Flight time is not within the expected range: " + flightTime);
         }
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 }

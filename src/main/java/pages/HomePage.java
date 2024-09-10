@@ -1,12 +1,9 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import utils.BrowserUtils;
-import utils.DriverManager;
 
 import java.util.List;
 
@@ -24,34 +21,35 @@ public class HomePage extends BasePage {
     @FindBy(css = "label[data-testid='enuygun-homepage-flight-departureDate-input-comp']")
     private WebElement departureDatePickerBox;
     @FindBy(css = "div[class='sc-ciQpPG fohxuO']")
-    private WebElement departureDatePicker;
+    private WebElement datePicker;
 
     @FindBy(css = "label[data-testid='enuygun-homepage-flight-returnDate-input-comp']")
-    private WebElement returnDatePicker;
+    private WebElement returnDatePickerBox;
 
     @FindBy(css = "button[type='submit']")
     private WebElement findCheapTicketButton;
 
-    public void enterRouteInformation(String fromWhere, String toWhere) {     //TARİH-ROTA PARAMETRİK OLACAK//
-        fromWhereBox.click();
+    public void enterRouteInformation(String fromWhere, String toWhere) {
+        BrowserUtils.clickOnElement(fromWhereBox);//TARİH-ROTA PARAMETRİK OLACAK//
         fromWhereBox.sendKeys(fromWhere);
         BrowserUtils.enterText();
-        toWhereBox.click();
+        BrowserUtils.clickOnElement(toWhereBox);
         toWhereBox.sendKeys(toWhere);
         BrowserUtils.enterText();
     }
 
     public void clickOnDepartureDatePicker(String departureDate) {
-        departureDatePickerBox.click();
+        BrowserUtils.clickOnElement(departureDatePickerBox);
         boolean isDateSelected = false;
+        int count = 0;
         while (!isDateSelected) {
-            List<WebElement> elements = departureDatePicker.findElements(By.cssSelector("div[class='sc-bXWnss fMfTLX']"));
+            List<WebElement> elements = datePicker.findElements(By.cssSelector("div[class='sc-bXWnss fMfTLX']"));
             if (departureDate.contains(elements.get(0).findElement(By.cssSelector("h3[class='sc-fKMpNL lkJvvP']")).getText())) {
                 String day = departureDate.split(" ")[0];
                 List<WebElement> days = elements.get(0).findElements(By.cssSelector("button[data-testid='datepicker-active-day']"));
                 for (int i = 0; i < days.size(); i++) {
                     if (days.get(i).getText().equals(day)) {
-                        days.get(i).click();
+                        BrowserUtils.clickOnElement(days.get(i));
                         isDateSelected = true;
                         break;
                     }
@@ -61,29 +59,70 @@ public class HomePage extends BasePage {
                 List<WebElement> days = elements.get(1).findElements(By.cssSelector("button[data-testid='datepicker-active-day']"));
                 for (int i = 0; i < days.size(); i++) {
                     if (days.get(i).getText().equals(day)) {
-                        days.get(i).click();
+                        BrowserUtils.clickOnElement(days.get(i));
                         isDateSelected = true;
                         break;
                     }
                 }
             } else {
-                departureDatePicker.findElement(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg")).click();
+                List<WebElement> arrows = datePicker.findElements(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg"));
+                if(count == 0) {
+                    BrowserUtils.clickOnElement(arrows.get(0));
+                }else{
+                    BrowserUtils.clickOnElement(arrows.get(1));
+                }
+                count++;
             }
         }
 
 
     }
 
-    public void clickOnReturnDatePicker() {
-        returnDatePicker.click();
-    }
+    public void clickOnReturnDatePicker(String returnDate) {
+        BrowserUtils.clickOnElement(returnDatePickerBox);
+        boolean isDateSelected = false;
+        int count = 0;
+        while (!isDateSelected) {
+            List<WebElement> elements = datePicker.findElements(By.cssSelector("div[class='sc-bXWnss fMfTLX']"));
+            if (returnDate.contains(elements.get(0).findElement(By.cssSelector("h3[class='sc-fKMpNL lkJvvP']")).getText())) {
+                String day = returnDate.split(" ")[0];
+                List<WebElement> days = elements.get(0).findElements(By.cssSelector("button[data-testid='datepicker-active-day']"));
+                for (int i = 0; i < days.size(); i++) {
+                    if (days.get(i).getText().equals(day)) {
+                        BrowserUtils.clickOnElement(days.get(i));
+                        isDateSelected = true;
+                        break;
+                    }
+                }
+            } else if (returnDate.contains(elements.get(1).findElement(By.cssSelector("h3[class='sc-fKMpNL lkJvvP']")).getText())) {
+                String day = returnDate.split(" ")[0];
+                List<WebElement> days = elements.get(1).findElements(By.cssSelector("button[data-testid='datepicker-active-day']"));
+                for (int i = 0; i < days.size(); i++) {
+                    if (days.get(i).getText().equals(day)) {
+                        BrowserUtils.clickOnElement(days.get(i));
+                        isDateSelected = true;
+                        break;
+                    }
+                }
+            } else {
+                List<WebElement> arrows = datePicker.findElements(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg"));
+                if(count == 0) {
+                    BrowserUtils.clickOnElement(arrows.get(0));
+                }else{
+                    BrowserUtils.clickOnElement(arrows.get(1));
+                }
+                count++;
+            }
+        }
 
+
+    }
     public void clickOnFindButton() {
-        findCheapTicketButton.click();
+        BrowserUtils.clickOnElement(findCheapTicketButton);
     }
 
     public void clickOnRoundTripFilter() {
-        tripFilter.get(1).click();
+        BrowserUtils.clickOnElement(tripFilter.get(1));
     }
 
 

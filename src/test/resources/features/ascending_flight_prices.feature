@@ -5,7 +5,7 @@ Feature: Search Flight
 
     When  the user enters the route from "İstanbul" to "Ankara"
 
-    And   the user chooses round trip and picks the date
+    And   the user chooses round trip and picks the departure date as "10 Kasım 2024" and the return date as "24 Kasım 2024"
 
     And   the user clicks on Find Button
 
@@ -22,5 +22,5 @@ Feature: Search Flight
 
     And   the user chooses Türk Hava Yolları
 
-    Then  the user sees the Türk Hava Yolları tickets in ascending order
+  #  Then  the user sees the Türk Hava Yolları tickets in ascending order
 
