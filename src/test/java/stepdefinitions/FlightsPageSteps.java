@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import pages.FlightsPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.BrowserUtils;
 import utils.DriverManager;
 
 public class FlightsPageSteps extends BaseStep {

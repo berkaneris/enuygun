@@ -5,8 +5,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BrowserUtils;
+
+import java.time.Duration;
+import java.util.List;
 
 public class PaymentPage extends BasePage {
 
@@ -19,10 +22,10 @@ public class PaymentPage extends BasePage {
     @FindBy(css = "input[data-testid='CVV']")
     private WebElement cvvField;
 
-    @FindBy(css = "div[data-testid='cardMonth']")
+    @FindBy(css = "input[data-testid='cardMonth-input']")
     private WebElement expiryMonthDropDownMenu;
 
-    @FindBy(css = "div[data-testid='cardYear']")
+    @FindBy(css = "input[data-testid='cardYear-input']")
     private WebElement expiryYearDropDownMenu;
 
     @FindBy(css = "button[data-testid='payment-form-submit-button']")
@@ -33,17 +36,33 @@ public class PaymentPage extends BasePage {
 
 
     public void verifyPaymentPage(String str) {
+
         wait.until(ExpectedConditions.visibilityOf(payButton));
+
         BrowserUtils.scrollToElement(payButton);
+
         payButton.getText();
         Assertions.assertEquals(str, payButton.getText());
 
     }
 
     public void fillCardNumberField(String cardNumber) {
-        cardNumberField.clear();
-        cardNumberField.click();
-        cardNumberField.sendKeys(cardNumber);
+        try {
+
+            WebDriverWait wait = new WebDriverWait(DRIVER, Duration.ofSeconds(20));
+            WebElement cardNumberField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[data-testid='cardNumber']")));
+
+            cardNumberField.clear();
+            cardNumberField.sendKeys(cardNumber);
+
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+
+            System.out.println("StaleElementReferenceException caught. Retrying...");
+            fillCardNumberField(cardNumber);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
     public void selectCardExpiryDate(String expiryDate) {
@@ -53,15 +72,35 @@ public class PaymentPage extends BasePage {
         String year = expiryDateParts[1];
 
 
+        expiryMonthDropDownMenu.click();
 
+        List<WebElement> allMonths = DRIVER.findElements(By.xpath("//button[@class='sc-JfKsv eYmLW']"));
 
+        for (int i = 0; i <= allMonths.size() - 1; i++) {
 
+            if (allMonths.get(i).getText().contains(month)) {
 
-        Select selectMonth = new Select(expiryMonthDropDownMenu);
-        selectMonth.selectByVisibleText(month);
+                allMonths.get(i).click();
 
-        Select selectYear = new Select(expiryYearDropDownMenu);
-        selectYear.selectByVisibleText(year);
+                break;
+
+            }
+        }
+
+        expiryYearDropDownMenu.click();
+
+        List<WebElement> allYears = DRIVER.findElements(By.xpath("//button[@class='sc-JfKsv eYmLW']"));
+
+        for (int i = 0; i <= allYears.size() - 1; i++) {
+
+            if (allYears.get(i).getText().contains(year)) {
+
+                allYears.get(i).click();
+
+                break;
+            }
+        }
+
 
     }
 
@@ -72,9 +111,11 @@ public class PaymentPage extends BasePage {
 
     }
 
+
     public void clickOnPayButton() {
         payButton.click();
     }
+
 
     public void verifyCardNumberIsInvalid() {
         wait.until(ExpectedConditions.visibilityOf(errorMessageText));

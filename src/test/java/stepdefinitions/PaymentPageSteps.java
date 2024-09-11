@@ -14,7 +14,6 @@ public class PaymentPageSteps extends BaseStep {
     PaymentPage paymentPage = new PaymentPage();
 
 
-
     @When("the user enters the card number as {string}")
     public void theUserEntersTheCardNumberAs(String str) {
         paymentPage.fillCardNumberField(str);

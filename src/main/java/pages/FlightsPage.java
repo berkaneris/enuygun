@@ -1,20 +1,24 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BrowserUtils;
 
 public class FlightsPage extends BasePage {
 
     @FindBy(xpath = "//div[contains(text(),'Havayolu')]")
-    private WebElement airlineTextField;              //Yeni sayfaya geçtiğimizi assert etmek için seçtim//
+    private WebElement airlineTextField;
 
     @FindBy(css = "div.ctx-filter-departure-return-time.card-header")
     private WebElement departureTimeFilter;
@@ -27,7 +31,6 @@ public class FlightsPage extends BasePage {
 
 
     @FindBy(xpath = "//div[@role='slider' and contains(@class, 'rc-slider-handle')]")
-    //(//div[@role='slider' and contains(@class, 'rc-slider-handle')])[1/2] istenen slider konumları //
     private List<WebElement> sliders;
 
 
@@ -51,6 +54,9 @@ public class FlightsPage extends BasePage {
 
     @FindBy(css = "div[class='provider-package']")
     private List<WebElement> arrivalPackageOptions;
+
+    @FindBy(css = "div[class='flight-list flight-list-return    domesticList']")
+    private WebElement arrivals;
 
 
     public void getAirlineText() {
@@ -116,7 +122,7 @@ public class FlightsPage extends BasePage {
                 flightTime = LocalTime.parse(timeText, formatter);
                 times.add(flightTime);
             } catch (Exception e) {
-                // Handle cases where the time format is invalid
+
                 System.out.println("Invalid time format: " + timeText);
 
 
@@ -139,12 +145,12 @@ public class FlightsPage extends BasePage {
         wait.until(ExpectedConditions.visibilityOfAllElements(flightTicketPrices));
 
         for (WebElement ticketPrice : flightTicketPrices) {
-            String priceText = ticketPrice.getText();  // Get price text
+            String priceText = ticketPrice.getText();
             priceText = priceText.replace("TL", "").replace(",", ".");
 
             try {
                 Double price = Double.parseDouble(priceText);
-                prices.add(price);  // Add price to list
+                prices.add(price);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid price format: " + priceText);
             }
@@ -154,7 +160,7 @@ public class FlightsPage extends BasePage {
 
         sortedPrices.sort(Double::compareTo);
 
-        // Check if original prices list is equal to the sorted list
+
         Assertions.assertEquals(prices, sortedPrices, "Flight prices are not in ascending order");
 
     }
@@ -169,16 +175,31 @@ public class FlightsPage extends BasePage {
     }
 
     public void clickOnInnerCheapestTicket() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(arrivalPackageOptions));
-        innerCheapestFlightTickets.get(1).click();
+        List<WebElement> selectButtons = arrivals.findElements(By.cssSelector("button[class='action-select-btn tr btn btn-success btn-sm']"));
+        selectButtons.get(0).click();
 
 
     }
 
     public void chooseBasicPackageForArrivalTicket() throws InterruptedException {
-        wait.until(ExpectedConditions.elementToBeClickable(arrivalPackageOptions.get(0)));
-        BrowserUtils.scrollToElement(arrivalPackageOptions.get(0));
-        actions.moveToElement(arrivalPackageOptions.get(0)).click().build().perform();
-        Thread.sleep(6000);
+        try {
+
+            WebDriverWait wait = new WebDriverWait(DRIVER, Duration.ofSeconds(20));
+            List<WebElement> arrivalPackageOptions = DRIVER.findElements(By.cssSelector("div[class='provider-package']"));
+
+            wait.until(ExpectedConditions.elementToBeClickable(arrivalPackageOptions.get(0)));
+
+            BrowserUtils.scrollToElement(arrivalPackageOptions.get(0));
+            Actions actions = new Actions(DRIVER);
+            actions.moveToElement(arrivalPackageOptions.get(0)).click().build().perform();
+
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            System.out.println("StaleElementReferenceException caught. Retrying...");
+            chooseBasicPackageForArrivalTicket();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
     }
 }

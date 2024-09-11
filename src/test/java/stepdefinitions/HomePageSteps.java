@@ -48,7 +48,7 @@ public class HomePageSteps extends BaseStep {
     }
 
     @And("the user enters password as {string}")
-    public void theUserEntersPasswordAs(String str)  {
+    public void theUserEntersPasswordAs(String str) {
         homePage.fillPasswordBox(str);
         LOGGER.debug("The user enters password");
     }

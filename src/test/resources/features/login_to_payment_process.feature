@@ -13,7 +13,7 @@ Feature: Search Flight
 
     When  the user enters the route from "İstanbul" to "Ankara"
 
-    And the user chooses round trip and picks the departure date as "11 Kasım 2024" and the return date as "20 Kasım 2024"
+    And the user chooses round trip and picks the departure date as "13 Ekim 2024" and the return date as "12 Kasım 2024"
 
     And the user clicks on Find Button
 
