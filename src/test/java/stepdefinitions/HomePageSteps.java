@@ -1,6 +1,7 @@
 package stepdefinitions;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.HomePage;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +33,37 @@ public class HomePageSteps extends BaseStep {
         LOGGER.debug("The user clicks on Find Cheap Tickets button");
     }
 
+
+    @When("the user clicks on Login Button")
+    public void theUserClicksOnLoginButton() {
+        homePage.clickOnLoginButton();
+        LOGGER.debug("The user clicks on Login Button");
+    }
+
+    @And("the user enters email as {string}")
+    public void theUserEntersEmailAs(String str) {
+        homePage.fillEMailBox(str);
+        LOGGER.debug("The user enters email");
+
+    }
+
+    @And("the user enters password as {string}")
+    public void theUserEntersPasswordAs(String str)  {
+        homePage.fillPasswordBox(str);
+        LOGGER.debug("The user enters password");
+    }
+
+    @And("the user clicks on Inner Login Button")
+    public void theUserClicksOnInnerLoginButton() {
+        homePage.clickOnInnerLoginButton();
+        LOGGER.debug("The user clicks on inner login button");
+    }
+
+    @Then("the user sees the username as {string} on the Hesabım Tab")
+    public void theUserSeesTheUserNameOnTheHesabımTab(String str) {
+        homePage.checkHesabimTab(str);
+        LOGGER.debug("The user sees the username on the Hesabim Tab");
+    }
 
 
 }

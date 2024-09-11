@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import pages.FlightsPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.BrowserUtils;
 import utils.DriverManager;
 
 public class FlightsPageSteps extends BaseStep {
@@ -52,11 +53,45 @@ public class FlightsPageSteps extends BaseStep {
     @And("the user chooses Türk Hava Yolları")
     public void theUserChoosesTurkHavaYolları() {
         flightsPage.clickOnTurkishAirlinesFilter();
-        LOGGER.info("The user clicks on Türk Hava Yolları checkbox");
+        LOGGER.debug("The user clicks on Türk Hava Yolları checkbox");
     }
 
     @Then("the user sees the Flights Page")
     public void theUserSeesTheFlightsPage() {
         Assertions.assertTrue(DriverManager.getDriver().getCurrentUrl().contains("https://www.enuygun.com/ucak-bileti"));
+        LOGGER.debug("The user sees the Flights Page");
     }
+
+    @Then("the user sees the Türk Hava Yolları tickets in ascending order")
+    public void theUserSeesTheTurkHavaYollarıTicketsInAscendingOrder() {
+        flightsPage.verifyAllTicketsAreInTheAscendingOrder();
+        LOGGER.debug("The use sees the Türk Hava Yolları ticket prices in ascending order");
+    }
+
+    @When("the user chooses the cheapest flight for departure")
+    public void theUserChoosesTheCheapestFlightForDeparture() {
+        flightsPage.clickOnCheapestDepartureTicketButton();
+        LOGGER.debug("The user clicks on the cheapest departure ticket button");
+    }
+
+    @And("the user chooses Süper Eko package")
+    public void theUserChoosesSuperEkoPackage() {
+        flightsPage.clickOnChooseAndProceedButton();
+        LOGGER.debug("The user chooses Süper Eko package and clicks on Seç ve İlerle Button");
+
+    }
+
+    @And("the user  chooses the cheapest flight for arrival")
+    public void theUserChoosesTheCheapestFlightForArrival() {
+        flightsPage.clickOnInnerCheapestTicket();
+        LOGGER.debug("The user chooses thecheapest flight for arrival");
+
+    }
+
+    @And("the user chooses basic package for arrival")
+    public void theUserChoosesBasicPackageForArrival() throws InterruptedException {
+        flightsPage.chooseBasicPackageForArrivalTicket();
+        LOGGER.debug("The user chooses the basic package for arrival");
+    }
+
 }

@@ -8,6 +8,6 @@ import utils.DriverManager;
 public class BaseStep {
 
 
-	protected final WebDriver DRIVER = DriverManager.getDriver();
+    protected final WebDriver DRIVER = DriverManager.getDriver();
 
 }

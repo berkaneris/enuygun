@@ -37,6 +37,21 @@ public class FlightsPage extends BasePage {
     @FindBy(css = "div[class='filter-accordion  '] > div")
     private List<WebElement> flightsFilters;
 
+    @FindBy(css = "div[class='summary-average-price']")
+    private List<WebElement> flightTicketPrices;
+
+    @FindBy(css = "button[class='action-select-btn tr btn btn-success btn-sm']")
+    private List<WebElement> departureTicketSelectionButtons;
+
+    @FindBy(xpath = "//span[contains(text(),'Seç ve İlerle')]")
+    private WebElement chooseAndProceedButton;
+
+    @FindBy(xpath = "//div[@id='flight-0' and @data-flight-index='0']")
+    private List<WebElement> innerCheapestFlightTickets;
+
+    @FindBy(css = "div[class='provider-package']")
+    private List<WebElement> arrivalPackageOptions;
+
 
     public void getAirlineText() {
         airlineTextField.getText();
@@ -115,5 +130,55 @@ public class FlightsPage extends BasePage {
         }
 
         Thread.sleep(1000);
+    }
+
+    public void verifyAllTicketsAreInTheAscendingOrder() {
+
+        List<Double> prices = new ArrayList<>();
+
+        wait.until(ExpectedConditions.visibilityOfAllElements(flightTicketPrices));
+
+        for (WebElement ticketPrice : flightTicketPrices) {
+            String priceText = ticketPrice.getText();  // Get price text
+            priceText = priceText.replace("TL", "").replace(",", ".");
+
+            try {
+                Double price = Double.parseDouble(priceText);
+                prices.add(price);  // Add price to list
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid price format: " + priceText);
+            }
+        }
+
+        List<Double> sortedPrices = new ArrayList<>(prices);
+
+        sortedPrices.sort(Double::compareTo);
+
+        // Check if original prices list is equal to the sorted list
+        Assertions.assertEquals(prices, sortedPrices, "Flight prices are not in ascending order");
+
+    }
+
+    public void clickOnCheapestDepartureTicketButton() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(departureTicketSelectionButtons));
+        departureTicketSelectionButtons.get(0).click();
+    }
+
+    public void clickOnChooseAndProceedButton() {
+        chooseAndProceedButton.click();
+    }
+
+    public void clickOnInnerCheapestTicket() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(arrivalPackageOptions));
+        innerCheapestFlightTickets.get(1).click();
+
+
+    }
+
+    public void chooseBasicPackageForArrivalTicket() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(arrivalPackageOptions.get(0)));
+        BrowserUtils.scrollToElement(arrivalPackageOptions.get(0));
+        actions.moveToElement(arrivalPackageOptions.get(0)).click().build().perform();
+        Thread.sleep(6000);
     }
 }

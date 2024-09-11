@@ -1,8 +1,10 @@
 package pages;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.BrowserUtils;
 
 import java.util.List;
@@ -28,6 +30,21 @@ public class HomePage extends BasePage {
 
     @FindBy(css = "button[type='submit']")
     private WebElement findCheapTicketButton;
+
+    @FindBy(xpath = "//span[contains(text(),'Giriş yap')]")
+    private WebElement loginButton;
+
+    @FindBy(css = "input[data-testid='membership-signin-email-input']")
+    private WebElement eMailbox;
+
+    @FindBy(css = "input[data-testid='membership-signin-password-input']")
+    private WebElement passwordBox;
+
+    @FindBy(css = "button[data-testid='membership-signin-submit-button']")
+    private WebElement innerLoginButon;
+
+    @FindBy(xpath = "//span[contains(text(),'Hesabım')]")
+    private WebElement hesabimTab;
 
     public void enterRouteInformation(String fromWhere, String toWhere) {
         BrowserUtils.clickOnElement(fromWhereBox);//TARİH-ROTA PARAMETRİK OLACAK//
@@ -66,9 +83,9 @@ public class HomePage extends BasePage {
                 }
             } else {
                 List<WebElement> arrows = datePicker.findElements(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg"));
-                if(count == 0) {
+                if (count == 0) {
                     BrowserUtils.clickOnElement(arrows.get(0));
-                }else{
+                } else {
                     BrowserUtils.clickOnElement(arrows.get(1));
                 }
                 count++;
@@ -106,9 +123,9 @@ public class HomePage extends BasePage {
                 }
             } else {
                 List<WebElement> arrows = datePicker.findElements(By.cssSelector("div[class='sc-cRmqLi iRpHSx'] svg"));
-                if(count == 0) {
+                if (count == 0) {
                     BrowserUtils.clickOnElement(arrows.get(0));
-                }else{
+                } else {
                     BrowserUtils.clickOnElement(arrows.get(1));
                 }
                 count++;
@@ -117,12 +134,39 @@ public class HomePage extends BasePage {
 
 
     }
+
     public void clickOnFindButton() {
         BrowserUtils.clickOnElement(findCheapTicketButton);
     }
 
     public void clickOnRoundTripFilter() {
         BrowserUtils.clickOnElement(tripFilter.get(1));
+    }
+
+    public void clickOnLoginButton() {
+        loginButton.click();
+    }
+
+    public void fillEMailBox(String str) {
+        eMailbox.click();
+        eMailbox.sendKeys(str);
+    }
+
+    public void fillPasswordBox(String str) {
+        passwordBox.click();
+        passwordBox.sendKeys(str);
+
+    }
+
+    public void clickOnInnerLoginButton() {
+        innerLoginButon.click();
+    }
+
+    public void checkHesabimTab(String str) {
+        wait.until(ExpectedConditions.visibilityOf(hesabimTab));
+        hesabimTab.getText();
+        Assertions.assertEquals(str, hesabimTab.getText());
+
     }
 
 

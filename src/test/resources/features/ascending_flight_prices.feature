@@ -22,5 +22,5 @@ Feature: Search Flight
 
     And   the user chooses Türk Hava Yolları
 
-  #  Then  the user sees the Türk Hava Yolları tickets in ascending order
+    Then  the user sees the Türk Hava Yolları tickets in ascending order
 
